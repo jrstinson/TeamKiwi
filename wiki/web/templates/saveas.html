@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Create a new page using the previous page as a template{% endblock title %}
+{% block content %}
+<form method="POST" class="form-inline">
+	{{ form.hidden_tag() }}
+	{{ input(form.url, placeholder="URL of the new page", autocomplete="off") }}
+	<input type="submit" class="btn btn-success" value="Save As">
+</form>
+{% endblock content %}
+
+{% block sidebar %}
+<p class="alert alert-success">Thank you for creating new content!</p>
+{% endblock sidebar %}
