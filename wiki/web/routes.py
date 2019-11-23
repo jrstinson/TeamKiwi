@@ -2,7 +2,8 @@
     Routes
     ~~~~~~
 """
-from flask import Blueprint
+import pdfkit, os, uuid
+from flask import Blueprint, Response
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -24,6 +25,8 @@ from wiki.web.user import protect
 
 
 bp = Blueprint('wiki', __name__)
+
+
 
 
 @bp.route('/')
@@ -72,6 +75,44 @@ def edit(url):
         flash('"%s" was saved.' % page.title, 'success')
         return redirect(url_for('wiki.display', url=url))
     return render_template('editor.html', form=form, page=page)
+
+@bp.route('/export/<path:url>/', methods=['GET', 'POST'])
+@protect
+def export(url):
+    page = current_wiki.get(url)
+    form = URLForm(obj=page)
+    return render_template('export.html', page=page, form=form)
+
+@bp.route('/get_pdf/<path:url>/', methods=['GET', 'POST'])
+@protect
+def get_pdf(url):
+    page = current_wiki.get(url)
+    pdf = current_wiki.get_pdf(url)
+    filename = url+'.pdf'
+    return Response(
+        pdf,
+        mimetype="application/pdf",
+        headers={
+            "Content-disposition": "attachment; filename=" + filename,
+            "Content-type": "application/force-download"
+        }
+    )
+
+@bp.route('/get_md/<path:url>/', methods=['GET', 'POST'])
+@protect
+def get_md(url):
+    page = current_wiki.get(url)
+    md = current_wiki.get_md(url)
+    filename = url+'.md'
+    return Response(
+        md,
+        mimetype="application/md",
+        headers={
+            "Content-disposition": "attachment; filename=" + filename,
+            "Content-type": "application/force-download"
+        }
+    )
+
 
 
 @bp.route('/preview/', methods=['POST'])
