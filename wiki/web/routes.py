@@ -115,6 +115,34 @@ def get_md(url):
 
 
 
+@bp.route('/saveas/<path:url>/', methods=['POST', 'GET'])
+@protect
+def saveas(url):
+    old_page = current_wiki.get_or_404(url)
+    form = URLForm(obj=old_page)
+    if form.validate_on_submit():
+        return redirect(url_for(
+            'wiki.copy', oldurl=form.clean_url(url), newurl=form.clean_url(form.url.data)
+        ))
+    return render_template('saveas.html', form=form)
+
+
+@bp.route('/copy/<path:oldurl>/<path:newurl>', methods=['POST', 'GET'])
+@protect
+def copy(oldurl, newurl):
+    old_page = current_wiki.get(oldurl)
+    new_page = current_wiki.get(newurl)
+    form = EditorForm(obj=old_page)
+    if form.validate_on_submit():
+        if not new_page:
+            new_page = current_wiki.get_bare(newurl)
+        form.populate_obj(new_page)
+        new_page.save()
+        flash('"%s" was saved.' % new_page.title, 'success')
+        return redirect(url_for('wiki.display', url=newurl))
+    return render_template('copyeditor.html', form=form, page=old_page, url=newurl)
+
+
 @bp.route('/preview/', methods=['POST'])
 @protect
 def preview():
