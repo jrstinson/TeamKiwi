@@ -10,6 +10,11 @@ import re
 from flask import abort
 from flask import url_for
 import markdown
+import requests
+
+Download_PATH = 'wkhtmltopdf/bin/wkhtmltopdf.exe'
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+Download_FOLDER = os.path.join(APP_ROOT, Download_PATH)
 
 
 def clean_url(url):
@@ -306,6 +311,29 @@ class Wiki(object):
             return False
         os.remove(path)
         return True
+
+    def get_md(self, url):
+        from markdown import markdown
+        import pdfkit
+
+        input_filename = 'content\\' + url + '.md'
+        md = open(input_filename, 'rb')
+        return md
+
+    def get_pdf(self, url):
+        from markdown import markdown
+        import pdfkit
+        import requests
+
+
+        input_filename = 'content\\' + url + '.md'
+        output_filename = url + '.pdf'
+        config = pdfkit.configuration(wkhtmltopdf=Download_FOLDER)
+
+        pdfkit.from_url('http://127.0.0.1:5000/' + url + '/', output_filename, configuration=config)
+        pdf = open(output_filename, 'rb')
+        return pdf
+
 
     def index(self):
         """

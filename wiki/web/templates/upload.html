@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Upload a new page{% endblock title %}
+{% block content %}
+      <form action="/upload/" method="POST" enctype="multipart/form-data">
+
+        <div class="form-group">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" name="file" id="file">
+            <label class="custom-file-label" for="image">Select text-based file</label>
+          </div>
+        </div>
+          {{ form.hidden_tag() }}
+	    {{ input(form.url, placeholder="URL of the new page", autocomplete="off") }}
+
+          <button type="submit" class="btn btn-success" value="Create">Create</button>
+</form>
+{% endblock content %}
+
+{% block sidebar %}
+<p class="alert alert-success">Thank you for creating new content!</p>
+{% endblock sidebar %}

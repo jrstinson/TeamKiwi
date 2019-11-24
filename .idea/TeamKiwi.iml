@@ -7,5 +7,16 @@
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />
+  <component name="TemplatesService">
+    <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />
+    <option name="TEMPLATE_FOLDERS">
+      <list>
+        <option value="$MODULE_DIR$/wiki/web/templates" />
+      </list>
+    </option>
+  </component>
+  <component name="TestRunnerService">
+    <option name="projectConfiguration" value="Twisted Trial" />
+    <option name="PROJECT_TEST_RUNNER" value="Twisted Trial" />
   </component>
 </module>

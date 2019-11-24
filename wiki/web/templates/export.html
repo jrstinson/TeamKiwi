@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}
+	{{ page.title }}
+{% endblock title %}
+
+{% block content %}
+<a href="{{ url_for('wiki.get_pdf', url=page.url) }}" class="btn btn-success">Download as PDF</a>
+    <a href="{{ url_for('wiki.get_md', url=page.url) }}" class="btn btn-success">Download as Markdown</a>
+</form>
+{% endblock content %}

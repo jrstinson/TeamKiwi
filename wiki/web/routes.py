@@ -2,7 +2,8 @@
     Routes
     ~~~~~~
 """
-from flask import Blueprint
+import pdfkit, os, uuid
+from flask import Blueprint, Response, app
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -21,9 +22,13 @@ from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
+from werkzeug.utils import secure_filename
 
 
 bp = Blueprint('wiki', __name__)
+
+
+
 
 
 @bp.route('/')
@@ -91,6 +96,92 @@ def edit(url):
         flash('"%s" was saved.' % page.title, 'success')
         return redirect(url_for('wiki.display', url=url))
     return render_template('editor.html', form=form, page=page)
+
+@bp.route('/export/<path:url>/', methods=['GET', 'POST'])
+@protect
+def export(url):
+    page = current_wiki.get(url)
+    form = URLForm(obj=page)
+    return render_template('export.html', page=page, form=form)
+
+@bp.route('/get_pdf/<path:url>/', methods=['GET', 'POST'])
+@protect
+def get_pdf(url):
+    page = current_wiki.get(url)
+    pdf = current_wiki.get_pdf(url)
+    filename = url+'.pdf'
+    #os.remove(filename)
+    return Response(
+        pdf,
+        mimetype="application/pdf",
+        headers={
+            "Content-disposition": "attachment; filename=" + filename,
+            "Content-type": "application/force-download"
+        }
+    )
+
+    os.remove(filename)
+
+
+file_location = 'textfiles'
+allowed_file_extensions = ["MD", "TXT", "HTML", "RTF", "DOC", "DOCX"]
+
+
+def allowed_file(filename):
+    if not "." in filename:
+        return False
+
+    ext = filename.rsplit(".", 1)[1]
+
+    if ext.upper() in allowed_file_extensions:
+        return True
+    else:
+        return False
+
+@bp.route('/upload/', methods=['GET', 'POST'])
+@protect
+def upload():
+
+    form = URLForm()
+    if request.method == "POST":
+
+        if request.files:
+            file = request.files["file"]
+
+            if file.filename == "":
+                print ("No filename")
+                return redirect(request.url)
+            if allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+
+                file.save(filename)
+                #return redirect(request.url)
+
+
+
+            else:
+                print("That file extension is not allowed")
+                #return redirect(request.url)
+
+    return render_template('upload.html', form=form)
+
+
+
+@bp.route('/get_md/<path:url>/', methods=['GET', 'POST'])
+@protect
+def get_md(url):
+    page = current_wiki.get(url)
+    md = current_wiki.get_md(url)
+    filename = url+'.md'
+    return Response(
+        md,
+        mimetype="application/md",
+        headers={
+            "Content-disposition": "attachment; filename=" + filename,
+            "Content-type": "application/force-download"
+        }
+    )
+
 
 
 @bp.route('/saveas/<path:url>/', methods=['POST', 'GET'])
