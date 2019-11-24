@@ -22,17 +22,20 @@
 								<li class="divider-vertical"></li>
 								<li><a href="{{ url_for('wiki.create') }}">New Page</a></li>
 								<li class="divider-vertical"></li>
-								<li><a href="{{ url_for('wiki.profile', user_id=current_user.get_id()) }}">{{ current_user.get_id() }}'s Profile</a></li>
-								<li class="divider-vertical"></li>
-                                <li><a href="{{ url_for('wiki.upload') }}">Upload Page</a></li>
-                                <li class="divider-vertical"></li>
+								<li><a href="{{ url_for('wiki.upload') }}">Upload Page</a></li>
+
 								<li></li>
 							</ul>
 
 							<ul class="nav pull-right">
-								{% if current_user.is_anonymous %}
+								{% if not current_user.get_id() %}
 									<li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
 								{% else %}
+									<li class="divider-vertical"></li>
+									{% if current_user.get_id() %}
+										<li><a href="{{ url_for('wiki.profile', user_id=current_user.get_id()) }}">{{ current_user.get_id() }}'s Profile</a></li>
+									{% endif %}
+                                <li class="divider-vertical"></li>
 									<li><a href="{{ url_for('wiki.user_logout') }}">Logout</a></li>
 								{% endif %}
 							</ul>
