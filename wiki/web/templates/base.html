@@ -22,6 +22,8 @@
 								<li class="divider-vertical"></li>
 								<li><a href="{{ url_for('wiki.create') }}">New Page</a></li>
 								<li class="divider-vertical"></li>
+								<li><a href="{{ url_for('wiki.profile', user_id=current_user.get_id()) }}">Profile</a></li>
+								<li class="divider-vertical"></li>
 								<li></li>
 							</ul>
 

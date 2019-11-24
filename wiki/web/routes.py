@@ -46,6 +46,11 @@ def index():
 @protect
 def display(url):
     page = current_wiki.get_or_404(url)
+    if page.owner:
+        if page.owner == current_user.get_id():
+            return render_template('page.html', page=page)
+        else:
+            return render_template('page.html', page=page, flag='readonly')
     return render_template('page.html', page=page)
 
 
@@ -63,6 +68,20 @@ def create():
 @protect
 def edit(url):
     page = current_wiki.get(url)
+    if page.owner:
+        if page.owner == current_user.get_id():
+            form = EditorForm(obj=page)
+            if form.validate_on_submit():
+                if not page:
+                    page = current_wiki.get_bare(url)
+                form.populate_obj(page)
+                page.save()
+                flash('"%s" was saved.' % page.title, 'success')
+                return redirect(url_for('wiki.display', url=url))
+            return render_template('editor.html', form=form, page=page)
+        else:
+            flash('You must own this page to edit it.', 'success')
+            return redirect(url_for('wiki.display', url=url))
     form = EditorForm(obj=page)
     if form.validate_on_submit():
         if not page:
@@ -102,6 +121,30 @@ def copy(oldurl, newurl):
     return render_template('copyeditor.html', form=form, page=old_page, url=newurl)
 
 
+@bp.route('/profile/<path:user_id>', methods=['POST', 'GET'])
+def profile(user_id):
+    page = current_wiki.get(user_id)
+    if page:
+        if page.owner:
+            if current_user.get_id() == page.owner:
+                return redirect(url_for('wiki.display', url=user_id))
+            else:
+                flash("Sorry, you can't access another user's profile.", 'success')
+                return render_template('home.html')
+        else:
+            return redirect(url_for('wiki.display', url=user_id))
+    else:
+        form = EditorForm(obj=page)
+        if form.validate_on_submit():
+            page = current_wiki.get_bare(user_id)
+            form.populate_obj(page)
+            page.owner = current_user.get_id()
+            page.save()
+            flash('"%s" was saved.' % page.title, 'success')
+            return redirect(url_for('wiki.display', url=user_id))
+    return render_template('editor.html', form=form, page=page, uid=user_id)
+
+
 @bp.route('/preview/', methods=['POST'])
 @protect
 def preview():
@@ -115,6 +158,16 @@ def preview():
 @protect
 def move(url):
     page = current_wiki.get_or_404(url)
+    if page.owner:
+        if current_user.get_id() == page.owner:
+            form = URLForm(obj=page)
+            if form.validate_on_submit():
+                newurl = form.url.data
+                current_wiki.move(url, newurl)
+                return redirect(url_for('wiki.display', url=newurl))
+        else:
+            flash('You must own this page to move it', 'success')
+            return redirect(url_for('wiki.display', url=url))
     form = URLForm(obj=page)
     if form.validate_on_submit():
         newurl = form.url.data
@@ -127,6 +180,14 @@ def move(url):
 @protect
 def delete(url):
     page = current_wiki.get_or_404(url)
+    if page.owner:
+        if current_user.get_id() == page.owner:
+            current_wiki.delete(url)
+            flash('Page "%s" was deleted.' % page.title, 'success')
+            return redirect(url_for('wiki.home'))
+        else:
+            flash('You must own this page to delete it.', 'success')
+            return redirect(url_for('wiki.display', url=url))
     current_wiki.delete(url)
     flash('Page "%s" was deleted.' % page.title, 'success')
     return redirect(url_for('wiki.home'))

@@ -227,6 +227,17 @@ class Page(object):
         self['title'] = value
 
     @property
+    def owner(self):
+        try:
+            return self['owner']
+        except KeyError:
+            return None
+
+    @owner.setter
+    def owner(self, value):
+        self['owner'] = value
+
+    @property
     def tags(self):
         try:
             return self['tags']
