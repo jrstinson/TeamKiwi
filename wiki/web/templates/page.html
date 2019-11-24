@@ -2,6 +2,9 @@
 
 {% block title %}
 	{{ page.title }}
+    {% if page.owner %}
+      <h4>{{ page.owner }}'s profile page</h4>
+    {% endif %}
 {% endblock title %}
 
 {% block content %}
