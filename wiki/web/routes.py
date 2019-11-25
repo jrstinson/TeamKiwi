@@ -363,6 +363,38 @@ def user_admin(user_id):
 def user_delete(user_id):
     pass
 
+"""
+Written by: Nick Peace
+
+"""
+@bp.route('/register/', methods=['GET','POST'])
+def user_create():
+    try:
+        form = RegistrationForm()
+
+        if request.method == "POST" and form.validate_on_submit():
+            username = form.user.data
+            password = form.password.data
+            fullName = form.fullName.data
+            email = form.email.data
+            bio = form.bio.data
+            favoriteLanguages = form.favoriteLanguages.data
+
+            if current_users.get_user(username):
+                flash("That username is already taken! please try again")
+                return render_template('register.html', form=form)
+
+            user = current_users.add_user(username,password,email,fullName,bio,favoriteLanguages)
+            login_user(user)
+            user.set('authenticated', True)
+            flash('Thanks for registering! Welcome to Kiwi.', 'success')
+            return redirect(request.args.get("next") or url_for('wiki.index'))
+
+        return render_template('register.html',form=form)
+
+    except Exception as e:
+        return(str(e))
+
 
 """
     Error Handlers
