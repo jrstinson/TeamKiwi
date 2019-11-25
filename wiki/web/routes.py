@@ -88,15 +88,14 @@ def edit(url):
             else:
                 flash('You must own this page to edit it.', 'success')
                 return redirect(url_for('wiki.display', url=url))
-    else:
-        form = EditorForm(obj=page)
-        if form.validate_on_submit():
-            if not page:
-                page = current_wiki.get_bare(url)
-            form.populate_obj(page)
-            page.save()
-            flash('"%s" was saved.' % page.title, 'success')
-            return redirect(url_for('wiki.display', url=url))
+    form = EditorForm(obj=page)
+    if form.validate_on_submit():
+        if not page:
+            page = current_wiki.get_bare(url)
+        form.populate_obj(page)
+        page.save()
+        flash('"%s" was saved.' % page.title, 'success')
+        return redirect(url_for('wiki.display', url=url))
     return render_template('editor.html', form=form, page=page)
 
 @bp.route('/export/<path:url>/', methods=['GET', 'POST'])
