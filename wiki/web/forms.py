@@ -26,6 +26,14 @@ class URLForm(Form):
     def clean_url(self, url):
         return clean_url(url)
 
+class UploadForm(Form):
+    url = TextField('', [InputRequired()])
+
+
+    def clean_url(self, url):
+        return clean_url(url)
+
+
 
 class SearchForm(Form):
     term = TextField('', [InputRequired()])
