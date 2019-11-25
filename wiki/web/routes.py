@@ -121,30 +121,7 @@ def edit(url):
         return redirect(url_for('wiki.display', url=url))
     return render_template('editor.html', form=form, page=page)
 
-@bp.route('/export/<path:url>/', methods=['GET', 'POST'])
-@protect
-def export(url):
-    page = current_wiki.get(url)
-    form = URLForm(obj=page)
-    return render_template('export.html', page=page, form=form)
 
-@bp.route('/get_pdf/<path:url>/', methods=['GET', 'POST'])
-@protect
-def get_pdf(url):
-    page = current_wiki.get(url)
-    pdf = current_wiki.get_pdf(url)
-    filename = url+'.pdf'
-    #os.remove(filename)
-    return Response(
-        pdf,
-        mimetype="application/pdf",
-        headers={
-            "Content-disposition": "attachment; filename=" + filename,
-            "Content-type": "application/force-download"
-        }
-    )
-
-    os.remove(filename)
 
 
 file_location = 'textfiles'
@@ -211,9 +188,9 @@ def upload():
 
 
 
-@bp.route('/get_md/<path:url>/', methods=['GET', 'POST'])
+@bp.route('/export/<path:url>/', methods=['GET', 'POST'])
 @protect
-def get_md(url):
+def export(url):
     page = current_wiki.get(url)
     md = current_wiki.get_md(url)
     filename = url+'.md'

@@ -324,23 +324,6 @@ class Wiki(object):
         md = open(input_filename, 'rb')
         return md
 
-    def get_pdf(self, url):
-        from markdown import markdown
-        import pdfkit
-        import requests
-
-
-        input_filename = 'content\\' + url + '.md'
-        output_filename = url + '.pdf'
-        config = pdfkit.configuration(wkhtmltopdf=Download_FOLDER)
-
-        pdfkit.from_url('http://127.0.0.1:5000/' + url + '/', output_filename, configuration=config)
-        pdf = open(output_filename, 'rb')
-        return pdf
-
-
-
-
 
     def index(self):
         """
