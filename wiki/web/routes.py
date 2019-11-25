@@ -3,11 +3,12 @@
     ~~~~~~
 """
 import pdfkit, os, uuid
-from flask import Blueprint, Response, app
+from flask import Blueprint, Response, app, current_app
 from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
+from flask import g
 from flask import url_for
 from flask_login import current_user
 from flask_login import login_required
@@ -18,10 +19,11 @@ from wiki.core import Processor
 from wiki.web.forms import EditorForm, UploadForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
+from wiki.web.forms import RegistrationForm
 from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
-from wiki.web.user import protect
+from wiki.web.user import protect, UserManager
 from werkzeug.utils import secure_filename
 
 
@@ -106,6 +108,14 @@ def edit(url):
             page.save()
             flash('"%s" was saved.' % page.title, 'success')
             return redirect(url_for('wiki.display', url=url))
+    form = EditorForm(obj=page)
+    if form.validate_on_submit():
+        if not page:
+            page = current_wiki.get_bare(url)
+        form.populate_obj(page)
+        page.save()
+        flash('"%s" was saved.' % page.title, 'success')
+        return redirect(url_for('wiki.display', url=url))
     return render_template('editor.html', form=form, page=page)
 
 @bp.route('/export/<path:url>/', methods=['GET', 'POST'])
@@ -255,15 +265,14 @@ def profile(user_id):
                 return render_template('home.html')
         else:
             return redirect(url_for('wiki.display', url=user_id))
-    else:
-        form = EditorForm(obj=page)
-        if form.validate_on_submit():
-            page = current_wiki.get_bare(user_id)
-            form.populate_obj(page)
-            page.owner = current_user.get_id()
-            page.save()
-            flash('"%s" was saved.' % page.title, 'success')
-            return redirect(url_for('wiki.display', url=user_id))
+    form = EditorForm(obj=page)
+    if form.validate_on_submit():
+        page = current_wiki.get_bare(user_id)
+        form.populate_obj(page)
+        page.owner = current_user.get_id()
+        page.save()
+        flash('"%s" was saved.' % page.title, 'success')
+        return redirect(url_for('wiki.display', url=user_id))
     return render_template('editor.html', form=form, page=page, uid=user_id)
 
 
@@ -379,6 +388,38 @@ def user_admin(user_id):
 @bp.route('/user/delete/<int:user_id>/')
 def user_delete(user_id):
     pass
+
+"""
+Written by: Nick Peace
+
+"""
+@bp.route('/register/', methods=['GET','POST'])
+def user_create():
+    try:
+        form = RegistrationForm()
+
+        if request.method == "POST" and form.validate_on_submit():
+            username = form.user.data
+            password = form.password.data
+            fullName = form.fullName.data
+            email = form.email.data
+            bio = form.bio.data
+            favoriteLanguages = form.favoriteLanguages.data
+
+            if current_users.get_user(username):
+                flash("That username is already taken! please try again")
+                return render_template('register.html', form=form)
+
+            user = current_users.add_user(username,password,email,fullName,bio,favoriteLanguages)
+            login_user(user)
+            user.set('authenticated', True)
+            flash('Thanks for registering! Welcome to Kiwi.', 'success')
+            return redirect(request.args.get("next") or url_for('wiki.index'))
+
+        return render_template('register.html',form=form)
+
+    except Exception as e:
+        return(str(e))
 
 
 """
