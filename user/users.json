@@ -26,5 +26,27 @@
     "password": "1234",
     "authenticated": true,
     "roles": []
+  },
+  "stinsonj2": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "jstinson14@outlook.com",
+    "fullname": "Jacob Stinson",
+    "bio": "",
+    "favoritelanguages": "",
+    "authenticated": false,
+    "password": "1234"
+  },
+  "admin": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "admin@fakewebsite.com",
+    "fullname": "admin",
+    "bio": "",
+    "favoritelanguages": "",
+    "authenticated": true,
+    "password": "1234"
   }
 }

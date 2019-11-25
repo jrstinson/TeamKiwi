@@ -88,7 +88,10 @@ def edit(url):
                     return redirect(url_for('wiki.display', url=url))
                 return render_template('editor.html', form=form, page=page)
             else:
-                flash('You must own this page to edit it.', 'success')
+                if page.owner == "admin":
+                    flash('This page is locked to editing by the site administrators.')
+                else:
+                    flash('You must own this page to move it', 'success')
                 return redirect(url_for('wiki.display', url=url))
     form = EditorForm(obj=page)
     if form.validate_on_submit():
@@ -272,7 +275,10 @@ def move(url):
                 current_wiki.move(url, newurl)
                 return redirect(url_for('wiki.display', url=newurl))
         else:
-            flash('You must own this page to move it', 'success')
+            if page.owner == "admin":
+                flash('This page is locked to editing by the site administrators.')
+            else:
+                flash('You must own this page to move it', 'success')
             return redirect(url_for('wiki.display', url=url))
     form = URLForm(obj=page)
     if form.validate_on_submit():
@@ -292,7 +298,10 @@ def delete(url):
             flash('Page "%s" was deleted.' % page.title, 'success')
             return redirect(url_for('wiki.home'))
         else:
-            flash('You must own this page to delete it.', 'success')
+            if page.owner == "admin":
+                flash('This page is locked to editing by the site administrators.')
+            else:
+                flash('You must own this page to move it', 'success')
             return redirect(url_for('wiki.display', url=url))
     current_wiki.delete(url)
     flash('Page "%s" was deleted.' % page.title, 'success')
@@ -347,11 +356,6 @@ def user_logout():
 
 @bp.route('/user/')
 def user_index():
-    pass
-
-
-@bp.route('/user/create/')
-def user_create():
     pass
 
 
