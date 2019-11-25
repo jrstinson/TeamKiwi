@@ -1,0 +1,44 @@
+<!--- Written by : Nick Peace
+
+This is the Jinja template for the user registration page
+--->
+{% extends "base.html" %}
+
+{% macro create_field(field) %}
+    <tr>
+        <td>{{ field.label }}</td>
+        <td>{{ field }}</td>
+    </tr>
+    {% if field.errors %}
+        {% for error in field.errors %}
+        <tr>
+            <td><strong><span style="color: red">{{ error }}</span></strong></td>
+            <td></td>
+        </tr>
+        {% endfor %}
+    {% endif %}
+
+{%  endmacro %}
+
+{% block title %}Register{% endblock title %}
+
+
+{% block content %}
+
+    <form class="form form-inline" method="POST">
+
+    <table>
+        {{ create_field(form.user) }}
+        {{ create_field(form.password) }}
+        {{ create_field(form.confirmPassword) }}
+        {{ create_field(form.fullName) }}
+        {{ create_field(form.email) }}
+        {{ create_field(form.bio) }}
+        {{ create_field(form.favoriteLanguages) }}
+    </table>
+        {{ form.hidden_tag() }}
+
+	<input type="submit" class="btn btn-primary" id="registerbtn" value="Register">
+    </form>
+
+{% endblock content %}

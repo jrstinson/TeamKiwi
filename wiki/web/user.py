@@ -56,6 +56,37 @@ class UserManager(object):
         userdata = users.get(name)
         return User(self, name, userdata)
 
+    def add_user(self, name, password, email, fullname='', bio='', proglanguages='',
+                 active=True, roles=[], authentication_method=None):
+        users = self.read()
+        if users.get(name):
+            return False
+        if authentication_method is None:
+            authentication_method = get_default_authentication_method()
+        new_user = {
+            'active': active,
+            'roles': roles,
+            'authentication_method': authentication_method,
+            'email': email,
+            'fullname': fullname,
+            'bio':bio,
+            'favoritelanguages': proglanguages,
+            'authenticated': False
+        }
+        # Currently we have only two authentication_methods: cleartext and
+        # hash. If we get more authentication_methods, we will need to go to a
+        # strategy object pattern that operates on User.data.
+        if authentication_method == 'hash':
+            new_user['hash'] = make_salted_hash(password)
+        elif authentication_method == 'cleartext':
+            new_user['password'] = password
+        else:
+            raise NotImplementedError(authentication_method)
+        users[name] = new_user
+        self.write(users)
+        userdata = users.get(name)
+        return User(self, name, userdata)
+
     def get_user(self, name):
         users = self.read()
         userdata = users.get(name)

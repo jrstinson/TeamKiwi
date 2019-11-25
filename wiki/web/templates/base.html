@@ -30,6 +30,7 @@
 							<ul class="nav pull-right">
 								{% if not current_user.get_id() %}
 									<li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
+                                    <li><a href="{{ url_for('wiki.user_create') }}">Register</a></li>
 								{% else %}
 									<li class="divider-vertical"></li>
 									{% if current_user.get_id() %}
