@@ -174,6 +174,7 @@ class Page(object):
         self.path = path
         self.url = url
         self._meta = OrderedDict()
+
         if not new:
             self.load()
             self.render()

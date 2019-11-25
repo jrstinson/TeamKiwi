@@ -15,7 +15,7 @@ from flask_login import login_user
 from flask_login import logout_user
 
 from wiki.core import Processor
-from wiki.web.forms import EditorForm
+from wiki.web.forms import EditorForm, UploadForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
@@ -88,6 +88,15 @@ def edit(url):
             else:
                 flash('You must own this page to edit it.', 'success')
                 return redirect(url_for('wiki.display', url=url))
+        else:
+            form = EditorForm(obj=page)
+            if form.validate_on_submit():
+                if not page:
+                    page = current_wiki.get_bare(url)
+                form.populate_obj(page)
+                page.save()
+                flash('"%s" was saved.' % page.title, 'success')
+                return redirect(url_for('wiki.display', url=url))
     else:
         form = EditorForm(obj=page)
         if form.validate_on_submit():
@@ -126,7 +135,7 @@ def get_pdf(url):
 
 
 file_location = 'textfiles'
-allowed_file_extensions = ["MD", "TXT", "HTML", "RTF", "DOC", "DOCX"]
+allowed_file_extensions = ["MD", "TXT", "HTML", "RTF", "XML"]
 
 
 def allowed_file(filename):
@@ -144,7 +153,7 @@ def allowed_file(filename):
 @protect
 def upload():
 
-    form = URLForm()
+    form = UploadForm()
     if request.method == "POST":
 
         if request.files:
@@ -159,10 +168,16 @@ def upload():
                 file.save(filename)
                 #return redirect(request.url)
 
-                mdname = form.url.data+'.md'
+                mdname = 'content\\'+form.url.data+'.md'
 
+                f = open(filename)
+                if 'title:' not in f.read():
+                    f1 = open(mdname, "w")
+                    f1.write('title: Default Title\ntags:\n\n')
+                    f1.close()
+                    f.close()
                 with open(filename) as f:
-                    with open(mdname, "w") as f1:
+                    with open(mdname, "a+") as f1:
                         for line in f:
                             f1.write(line)
 
@@ -171,12 +186,13 @@ def upload():
 
 
             else:
-                print("That file extension is not allowed")
-                #return redirect(request.url)
+                print("That file extension is not allowed. Please select a valid file extension (.md, .txt, .rtf, .html, .xml")
+                flash("That file extension is not allowed. Please select a valid file extension (.md, .txt, .rtf, .html, .xml)")
+                return redirect(request.url)
 
-            if form.validate_on_submit():
-                return redirect(url_for(
-                    'wiki.edit', url=form.clean_url(form.url.data)))
+        if form.validate_on_submit():
+            return redirect(url_for(
+                'wiki.edit', url=form.clean_url(form.url.data)))
 
     return render_template('upload.html', form=form)
 
