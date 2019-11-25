@@ -254,6 +254,9 @@ class Page(object):
         self['tags'] = value
 
 
+
+
+
 class Wiki(object):
     def __init__(self, root):
         self.root = root
@@ -333,6 +336,9 @@ class Wiki(object):
         pdfkit.from_url('http://127.0.0.1:5000/' + url + '/', output_filename, configuration=config)
         pdf = open(output_filename, 'rb')
         return pdf
+
+
+
 
 
     def index(self):

@@ -157,11 +157,24 @@ def upload():
                 file.save(filename)
                 #return redirect(request.url)
 
+                mdname = form.url.data+'.md'
+
+                with open(filename) as f:
+                    with open(mdname, "w") as f1:
+                        for line in f:
+                            f1.write(line)
+
+                os.remove(filename)
+
 
 
             else:
                 print("That file extension is not allowed")
                 #return redirect(request.url)
+
+            if form.validate_on_submit():
+                return redirect(url_for(
+                    'wiki.edit', url=form.clean_url(form.url.data)))
 
     return render_template('upload.html', form=form)
 
