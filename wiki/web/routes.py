@@ -240,15 +240,14 @@ def profile(user_id):
                 return render_template('home.html')
         else:
             return redirect(url_for('wiki.display', url=user_id))
-    else:
-        form = EditorForm(obj=page)
-        if form.validate_on_submit():
-            page = current_wiki.get_bare(user_id)
-            form.populate_obj(page)
-            page.owner = current_user.get_id()
-            page.save()
-            flash('"%s" was saved.' % page.title, 'success')
-            return redirect(url_for('wiki.display', url=user_id))
+    form = EditorForm(obj=page)
+    if form.validate_on_submit():
+        page = current_wiki.get_bare(user_id)
+        form.populate_obj(page)
+        page.owner = current_user.get_id()
+        page.save()
+        flash('"%s" was saved.' % page.title, 'success')
+        return redirect(url_for('wiki.display', url=user_id))
     return render_template('editor.html', form=form, page=page, uid=user_id)
 
 
