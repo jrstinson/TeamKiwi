@@ -3,11 +3,12 @@
     ~~~~~~
 """
 import pdfkit, os, uuid
-from flask import Blueprint, Response, app
+from flask import Blueprint, Response, app, current_app
 from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
+from flask import g
 from flask import url_for
 from flask_login import current_user
 from flask_login import login_required
@@ -18,10 +19,11 @@ from wiki.core import Processor
 from wiki.web.forms import EditorForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
+from wiki.web.forms import RegistrationForm
 from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
-from wiki.web.user import protect
+from wiki.web.user import protect, UserManager
 from werkzeug.utils import secure_filename
 
 
