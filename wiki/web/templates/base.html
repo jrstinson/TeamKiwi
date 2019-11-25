@@ -5,6 +5,23 @@
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='responsive.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='pygments.css') }}">
+		<script>
+			function getPDF(){
+				var doc = new jsPDF();
+				console.log("test");
+				var specialElementHandlers = {
+					'#getPDF': function (element, renderer) {
+						return true;
+					}
+				};
+
+				doc.fromHTML($('#htmldiv')[0], 20, 20, {'width':500,  'elementHandlers': specialElementHandlers});
+				doc.save('TeamKiwi.pdf');
+   			}
+ 		</script>
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+		<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
 	</head>
 
 	<body>
