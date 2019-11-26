@@ -22,15 +22,17 @@ when you submit to others.
 ##Features
 ###Jacob Stinson
 * API: use page as template (saveas)
-* Example: SERVER/saveas/page_name/new_page_name 
+* Example: This feature makes use of two APIs. SERVER/saveas/page_name and SERVER/copy/old_page/new_page.
 * Unit test: 
     * New page should not have the same name as old page
     * New page should contain the same markdown as old page
-* Demonstration1: ngrok/saveas/kiwi/new_kiwi
+    * If old page has an owner, new page should not be owned by same person.
+* Demonstration1: ngrok/saveas/template ngrok/copy/template/new_page
     * Description:
-         * Click "save as" when editing
+         * Click "use as template" on the sidebar
          * Enter a name for the copied page
-         * Click Save
+         * Edit the copied page to your liking
+         * Click "save as new_page"
 ###Nick Peace
 * API: User creation
 * Example: POST to SERVER/register/
@@ -40,7 +42,7 @@ when you submit to others.
 * Demonstration1: ngrok/register/
     * Description:
          * Click 'register' at the top of page
-         * Enter a new username and password
+         * Enter a new username, password, email, and any other optional fields
          * Submit form and log in as new user
 ###Diana Coronado
 * API: image upload
@@ -55,26 +57,46 @@ when you submit to others.
          * Click Save
 ###Ryan Massey
 * API: User profile page
-* Example: SERVER/user/username
+* Example: SERVER/profile/username
 * Unit test: 
     * User page should be unique to the user
     * User page should not be editable by other users
-* Demonstration1: ngrok/user/stinsonj2
+    * User page should be viewable by others
+    * User page should contain info about the user that was obtained upon signup
+* Demonstration1: ngrok/profile/stinsonj2
     * Description:
          * Login to wiki
          * Click on "profile"
-         * View or edit profile page
+         * Create your profile page if you have not already
+         * Edit your profile page if it doesn't already exist
 ###Garrett Foister
-* API: Save page as markdown / PDF
-* Example: SERVER/export/type/page
+* API: Save page as markdown or PDF file
+* Example: SERVER/export/page
 * Unit test: 
     * page should exist
     * page should download in the correct file format to user's system
-* Demonstration1: ngrok/export/pdf/kiwi
+* Demonstration1: ngrok/export/home
     * Description:
          * Go to any wiki page
-         * Click "export"
-         * Select file type and submit
+         * Click "Save as markdown"
+         * Save file
+--------------------------------------
+* API: Upload plain text file
+* Example: SERVER/upload
+* Unit test: 
+    * Choose a file to upload
+    * Choose URL of new page
+    * Hit submit
+    * If proper file type, user will be brought to edit page
+    * If improper file type, user will be asked to upload a different file
+
+* Demonstration1: ngrok/upload
+    * Description:
+         * Go to the upload page
+         * Select a plain text file type
+         * Select a proper URL
+         * Hit create
+
 ##Schedule:
 * **Meetings:**
       - Two remote meetings per week via Discord on Wednesday and Thursday evenings. If an in person meeting is needed, it will occur on a Thursday. 
