@@ -134,12 +134,6 @@ def picture(url,image_name):
     img_url = "/static/picture/{}/{}".format(url,image_name)
     return render_template('picture.html',img_url = img_url,img_name=image_name)
 
-@bp.route('/export/<path:url>/', methods=['GET', 'POST'])
-@protect
-def export(url):
-    page = current_wiki.get(url)
-    form = URLForm(obj=page)
-    return render_template('export.html', page=page, form=form)
 
 file_location = 'textfiles'
 allowed_file_extensions = ["MD", "TXT", "HTML", "RTF", "XML"]

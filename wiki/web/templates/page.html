@@ -11,18 +11,29 @@
 	</head>
 
     <script>
-			function getPDF(){
-				var doc = new jsPDF();
-				console.log("test");
-				var specialElementHandlers = {
-					'#getPDF': function (element, renderer) {
-						return true;
-					}
-				};
+			function getPDF() {
+			    html2canvas(document.body).then(function(canvas) {
 
-				doc.fromHTML($('#htmldiv')[0], 20, 20, {'elementHandlers': specialElementHandlers});
-				doc.save('TeamKiwi.pdf');
-   			}
+                var imgData = canvas.toDataURL('image/png')
+                var imgWidth = 210;
+                var pageHeight = 295;
+                var imgHeight = canvas.height * imgWidth / canvas.width;
+                var heightLeft = imgHeight;
+                var doc = new jsPDF('p', 'mm');
+                var position = 0;
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                doc.save("TeamKiwi.pdf")
+            });
+            }
+
  		</script>
 <div id="htmldiv">
 	<body>

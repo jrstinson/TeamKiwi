@@ -24,7 +24,7 @@
     "active": true,
     "authentication_method": "cleartext",
     "password": "1234",
-    "authenticated": true,
+    "authenticated": false,
     "roles": []
   },
   "stinsonj2": {
@@ -46,6 +46,17 @@
     "fullname": "admin",
     "bio": "",
     "favoritelanguages": "",
+    "authenticated": true,
+    "password": "1234"
+  },
+  "garrett2": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "foisterg1@nku.edu",
+    "fullname": "Garrett Scott Foister",
+    "bio": "Garrett's Account",
+    "favoritelanguages": "Java",
     "authenticated": true,
     "password": "1234"
   }
