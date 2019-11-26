@@ -18,7 +18,7 @@
     "fullname": "admin",
     "bio": "",
     "favoritelanguages": "",
-    "authenticated": true,
+    "authenticated": false,
     "password": "1234"
   },
   "jakeE": {
@@ -29,7 +29,7 @@
     "fullname": "Jacob Stinson",
     "bio": "kajsdffksdfvn;adfvn",
     "favoritelanguages": "French",
-    "authenticated": false,
+    "authenticated": true,
     "password": "1234"
   },
   "garrett2": {

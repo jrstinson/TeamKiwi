@@ -167,7 +167,6 @@ file_location = 'textfiles'
 allowed_file_extensions = ["MD", "TXT", "HTML", "RTF", "XML"]
 
 
-
 def allowed_file(filename):
     if not "." in filename:
         return False
@@ -340,7 +339,7 @@ def delete(url):
             if page.owner == "admin":
                 flash('This page is locked to editing by the site administrators.')
             else:
-                flash('You must own this page to move it', 'success')
+                flash('You must own this page to delete it', 'success')
             return redirect(url_for('wiki.display', url=url))
     current_wiki.delete(url)
     flash('Page "%s" was deleted.' % page.title, 'success')
