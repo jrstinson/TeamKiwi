@@ -10,7 +10,7 @@
     "active": true,
     "authentication_method": "cleartext",
     "password": "1234",
-    "authenticated": false,
+    "authenticated": true,
     "roles": []
   },
   "jake": {
@@ -46,7 +46,18 @@
     "fullname": "admin",
     "bio": "",
     "favoritelanguages": "",
-    "authenticated": true,
+    "authenticated": false,
     "password": "1234"
+  },
+  "bophades": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "sugma@diq.com",
+    "fullname": "Mike Rotch",
+    "bio": "penis joke",
+    "favoritelanguages": "C",
+    "authenticated": true,
+    "password": "ligma"
   }
 }

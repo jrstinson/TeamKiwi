@@ -70,6 +70,13 @@
 					{% block header %}
 						<div class="page-header">
                         <h1>{% block title %}{{ page.title }}{% endblock title %}</h1>
+							{% if page.owner %}
+								{% if page.owner != "admin" %}
+									<h4>{{ page.owner }}'s Profile</h4>
+								{% endif %}
+							{% endif %}
+
+							<h4></h4>
 						</div>
 					{% endblock header %}
 				</div>

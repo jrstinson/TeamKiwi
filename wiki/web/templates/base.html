@@ -10,21 +10,6 @@
 		<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
 	</head>
 
-    <script>
-			function getPDF(){
-				var doc = new jsPDF();
-				console.log("test");
-				var specialElementHandlers = {
-					'#getPDF': function (element, renderer) {
-						return true;
-					}
-				};
-
-				doc.fromHTML($('#htmldiv')[0], 20, 20, {'width':500,  'elementHandlers': specialElementHandlers});
-				doc.save('TeamKiwi.pdf');
-   			}
- 		</script>
-
 	<body>
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
@@ -63,7 +48,7 @@
 				</div>
 			</div>
 		</div>
-
+		<div id="htmldiv">
 		<div class="container">
 			<div class="row">
 				<div class="span10 offset1">
@@ -98,6 +83,7 @@
 				</div>
 			</div>
 		</div>
+		</div>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js "></script>
 		<script type="text/javascript">
 			if (typeof jQuery == 'undefined') {
@@ -109,5 +95,6 @@
 			{% block postscripts %}
 			{% endblock postscripts %}
 		</script>
+
 	</body>
 </html>
