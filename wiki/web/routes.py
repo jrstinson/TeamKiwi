@@ -28,9 +28,8 @@ from werkzeug.utils import secure_filename
 
 
 bp = Blueprint('wiki', __name__)
-
-
-
+file_location = 'textfiles'
+allowed_file_extensions = ["MD", "TXT", "HTML", "RTF", "XML"]
 
 
 @bp.route('/')
@@ -122,12 +121,6 @@ def edit(url):
     return render_template('editor.html', form=form, page=page)
 
 
-
-
-file_location = 'textfiles'
-allowed_file_extensions = ["MD", "TXT", "HTML", "RTF", "XML"]
-
-
 def allowed_file(filename):
     if not "." in filename:
         return False
@@ -138,6 +131,7 @@ def allowed_file(filename):
         return True
     else:
         return False
+
 
 @bp.route('/upload/', methods=['GET', 'POST'])
 @protect
@@ -173,8 +167,6 @@ def upload():
 
                 os.remove(filename)
 
-
-
             else:
                 print("That file extension is not allowed. Please select a valid file extension (.md, .txt, .rtf, .html, .xml")
                 flash("That file extension is not allowed. Please select a valid file extension (.md, .txt, .rtf, .html, .xml)")
@@ -185,7 +177,6 @@ def upload():
                 'wiki.edit', url=form.clean_url(form.url.data)))
 
     return render_template('upload.html', form=form)
-
 
 
 @bp.route('/export/<path:url>/', methods=['GET', 'POST'])
@@ -202,7 +193,6 @@ def export(url):
             "Content-type": "application/force-download"
         }
     )
-
 
 
 @bp.route('/saveas/<path:url>/', methods=['POST', 'GET'])
@@ -374,6 +364,8 @@ def user_delete(user_id):
 Written by: Nick Peace
 
 """
+
+
 @bp.route('/register/', methods=['GET','POST'])
 def user_create():
     try:
