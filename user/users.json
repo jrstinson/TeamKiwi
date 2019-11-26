@@ -18,7 +18,7 @@
     "fullname": "admin",
     "bio": "",
     "favoritelanguages": "",
-    "authenticated": false,
+    "authenticated": true,
     "password": "1234"
   },
   "jakeE": {
@@ -29,7 +29,7 @@
     "fullname": "Jacob Stinson",
     "bio": "kajsdffksdfvn;adfvn",
     "favoritelanguages": "French",
-    "authenticated": true,
+    "authenticated": false,
     "password": "1234"
   },
   "garrett2": {
@@ -42,5 +42,115 @@
     "favoritelanguages": "Java",
     "authenticated": true,
     "password": "1234"
+  },
+  "Jacob": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "Minnemanj1@nku.edu",
+    "fullname": "Sosjdh",
+    "bio": "",
+    "favoritelanguages": "",
+    "authenticated": true,
+    "password": "1234"
+  },
+  "givemeasignon": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "yoursignon@please.com",
+    "fullname": "Give Me",
+    "bio": "no thanks",
+    "favoritelanguages": "Spanish, English, and German",
+    "authenticated": false,
+    "password": "1234"
+  },
+  "name1": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "t@email.com",
+    "fullname": "t",
+    "bio": "",
+    "favoritelanguages": "",
+    "authenticated": true,
+    "password": "12345"
+  },
+  "kayla": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "barenzk1@nku.edu",
+    "fullname": "kayla barenz",
+    "bio": "it's me",
+    "favoritelanguages": "english",
+    "authenticated": true,
+    "password": "123abc!"
+  },
+  "somebody": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "ni@knightsthatsay.edu",
+    "fullname": "I don't know",
+    "bio": "jjjjjjjjjjjjjjjjjjjjj",
+    "favoritelanguages": "Whitespace",
+    "authenticated": true,
+    "password": "one"
+  },
+  "wepeefreely": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "wepeefreely@gmail.com",
+    "fullname": "wepeefreely",
+    "bio": "wepeefreely",
+    "favoritelanguages": "wepeefreely",
+    "authenticated": true,
+    "password": "wepeefreely"
+  },
+  "guy123": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "fffff@gmail.com",
+    "fullname": "name name name 1",
+    "bio": "Errors occured verifying your input. Please check the marked fields below.",
+    "favoritelanguages": "Python",
+    "authenticated": true,
+    "password": "Password123"
+  },
+  "newuser42": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "newuser@fakeemail.com",
+    "fullname": "New User",
+    "bio": "I am permanently new",
+    "favoritelanguages": "French",
+    "authenticated": true,
+    "password": "1234"
+  },
+  "Patrick": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "votop1@nku.edu",
+    "fullname": "Patrick Voto",
+    "bio": "Programmer, hunter, builder",
+    "favoritelanguages": "English, Python",
+    "authenticated": false,
+    "password": "hi"
+  },
+  "Patrick Voto": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "email": "votop1@nku.edu",
+    "fullname": "Patrick Voto",
+    "bio": "Programmer, hunter, builder",
+    "favoritelanguages": "English, Python",
+    "authenticated": true,
+    "password": "hi"
   }
 }

@@ -1,9 +1,8 @@
-title: project-template
+title: some other team
 tags: interesting
-owner: admin
 
 #Members
-* Default Admin. Nice.
+* 
 
 ###Rules
 * No surprises.
