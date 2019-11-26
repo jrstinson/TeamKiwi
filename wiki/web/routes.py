@@ -54,10 +54,11 @@ def index():
 def display(url):
     page = current_wiki.get_or_404(url)
     if page.owner:
+        owning_user = current_users.get_user(page.owner)
         if page.owner == current_user.get_id():
-            return render_template('page.html', page=page)
+            return render_template('page.html', page=page, ou=owning_user)
         else:
-            return render_template('page.html', page=page, flag='readonly')
+            return render_template('page.html', page=page, flag='readonly', ou=owning_user)
     return render_template('page.html', page=page)
 
 
@@ -374,7 +375,7 @@ def user_login():
         login_user(user)
         user.set('authenticated', True)
         flash('Login successful.', 'success')
-        return redirect(request.args.get("next") or url_for('wiki.index'))
+        return redirect(request.args.get("next") or url_for('wiki.home'))
     return render_template('login.html', form=form)
 
 
