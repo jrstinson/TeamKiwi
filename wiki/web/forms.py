@@ -8,6 +8,7 @@ from wtforms import TextField
 from wtforms import TextAreaField
 from wtforms import PasswordField
 from wtforms import StringField
+from wtforms import FileField
 from wtforms.validators import InputRequired
 from wtforms.validators import ValidationError
 
@@ -47,6 +48,7 @@ class EditorForm(Form):
     title = TextField('', [InputRequired()])
     body = TextAreaField('', [InputRequired()])
     tags = TextField('')
+    image = FileField()
 
 
 class LoginForm(Form):
