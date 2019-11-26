@@ -54,10 +54,11 @@ def index():
 def display(url):
     page = current_wiki.get_or_404(url)
     if page.owner:
+        owning_user = current_users.get_user(page.owner)
         if page.owner == current_user.get_id():
-            return render_template('page.html', page=page)
+            return render_template('page.html', page=page, ou=owning_user)
         else:
-            return render_template('page.html', page=page, flag='readonly')
+            return render_template('page.html', page=page, flag='readonly', ou=owning_user)
     return render_template('page.html', page=page)
 
 
@@ -82,6 +83,15 @@ def edit(url):
                 if form.validate_on_submit():
                     if not page:
                         page = current_wiki.get_bare(url)
+                    if form.image.data:
+                        directory = "wiki/web/static/picture/{}".format(url)
+                        if not os.path.exists(directory):
+                            os.makedirs(directory)
+                        f = request.files['image']
+                        sfname = "{}/{}".format(directory, str(secure_filename(f.filename)))
+                        f.save(sfname)
+                        form.body.data = form.body.data + "\n![{}](/static/picture/{}/{})".format(f.filename, url,
+                                                                                                  f.filename)
                     form.populate_obj(page)
                     page.save()
                     flash('"%s" was saved.' % page.title, 'success')
@@ -98,6 +108,15 @@ def edit(url):
             if form.validate_on_submit():
                 if not page:
                     page = current_wiki.get_bare(url)
+                if form.image.data:
+                    directory = "wiki/web/static/picture/{}".format(url)
+                    if not os.path.exists(directory):
+                        os.makedirs(directory)
+                    f = request.files['image']
+                    sfname = "{}/{}".format(directory, str(secure_filename(f.filename)))
+                    f.save(sfname)
+                    form.body.data = form.body.data + "\n![{}](/static/picture/{}/{})".format(f.filename, url,
+                                                                                              f.filename)
                 form.populate_obj(page)
                 page.save()
                 flash('"%s" was saved.' % page.title, 'success')
@@ -107,6 +126,14 @@ def edit(url):
         if form.validate_on_submit():
             if not page:
                 page = current_wiki.get_bare(url)
+            if form.image.data:
+                directory = "wiki/web/static/picture/{}".format(url)
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+                f = request.files['image']
+                sfname = "{}/{}".format(directory, str(secure_filename(f.filename)))
+                f.save(sfname)
+                form.body.data = form.body.data + "\n![{}](/static/picture/{}/{})".format(f.filename, url, f.filename)
             form.populate_obj(page)
             page.save()
             flash('"%s" was saved.' % page.title, 'success')
@@ -129,6 +156,7 @@ def edit(url):
         return redirect(url_for('wiki.display', url=url))
     return render_template('editor.html', form=form, page=page)
 
+
 @bp.route('/picture/<path:url>/<path:image_name>')
 def picture(url,image_name):
     img_url = "/static/picture/{}/{}".format(url,image_name)
@@ -137,6 +165,7 @@ def picture(url,image_name):
 
 file_location = 'textfiles'
 allowed_file_extensions = ["MD", "TXT", "HTML", "RTF", "XML"]
+
 
 
 def allowed_file(filename):
@@ -351,7 +380,7 @@ def user_login():
         login_user(user)
         user.set('authenticated', True)
         flash('Login successful.', 'success')
-        return redirect(request.args.get("next") or url_for('wiki.index'))
+        return redirect(request.args.get("next") or url_for('wiki.home'))
     return render_template('login.html', form=form)
 
 
