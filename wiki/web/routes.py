@@ -23,6 +23,7 @@ from wiki.web.forms import RegistrationForm
 from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
+from wiki.web.user import protect
 from wiki.web.user import protect, UserManager
 from werkzeug.utils import secure_filename
 
@@ -114,11 +115,34 @@ def edit(url):
     if form.validate_on_submit():
         if not page:
             page = current_wiki.get_bare(url)
+        if form.image.data:
+            directory = "wiki/web/static/picture/{}".format(url)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            f = request.files['image']
+            sfname = "{}/{}".format(directory,str(secure_filename(f.filename)))
+            f.save(sfname)
+            form.body.data = form.body.data + "\n![{}](/static/picture/{}/{})".format(f.filename,url,f.filename)
         form.populate_obj(page)
         page.save()
         flash('"%s" was saved.' % page.title, 'success')
         return redirect(url_for('wiki.display', url=url))
     return render_template('editor.html', form=form, page=page)
+
+@bp.route('/picture/<path:url>/<path:image_name>')
+def picture(url,image_name):
+    img_url = "/static/picture/{}/{}".format(url,image_name)
+    return render_template('picture.html',img_url = img_url,img_name=image_name)
+
+@bp.route('/export/<path:url>/', methods=['GET', 'POST'])
+@protect
+def export(url):
+    page = current_wiki.get(url)
+    form = URLForm(obj=page)
+    return render_template('export.html', page=page, form=form)
+
+file_location = 'textfiles'
+allowed_file_extensions = ["MD", "TXT", "HTML", "RTF", "XML"]
 
 
 def allowed_file(filename):
