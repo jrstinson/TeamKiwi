@@ -18,23 +18,7 @@
     "fullname": "admin",
     "bio": "",
     "favoritelanguages": "",
-    "authenticated": false,
-    "password": "1234"
-  },
-  "bophades": {
-    "active": true,
-    "roles": [],
-    "authentication_method": "cleartext",
-
-  "RyanM": {
-    "active": true,
-    "roles": [],
-    "authentication_method": "cleartext",
-    "email": "massey@masterz.us",
-    "fullname": "Ryan Massey",
-    "bio": "Testing Bio",
-    "favoritelanguages": "JavaScript",
-    "authenticated": false,
+    "authenticated": true,
     "password": "1234"
   },
   "jakeE": {
