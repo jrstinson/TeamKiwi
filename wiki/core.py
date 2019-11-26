@@ -10,6 +10,7 @@ import re
 from flask import abort
 from flask import url_for
 import markdown
+import requests
 
 Download_PATH = 'wkhtmltopdf/bin/wkhtmltopdf.exe'
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -173,6 +174,7 @@ class Page(object):
         self.path = path
         self.url = url
         self._meta = OrderedDict()
+
         if not new:
             self.load()
             self.render()
@@ -231,6 +233,17 @@ class Page(object):
         self['title'] = value
 
     @property
+    def owner(self):
+        try:
+            return self['owner']
+        except KeyError:
+            return None
+
+    @owner.setter
+    def owner(self, value):
+        self['owner'] = value
+
+    @property
     def tags(self):
         try:
             return self['tags']
@@ -240,6 +253,9 @@ class Page(object):
     @tags.setter
     def tags(self, value):
         self['tags'] = value
+
+
+
 
 
 class Wiki(object):
@@ -307,22 +323,6 @@ class Wiki(object):
         input_filename = 'content\\' + url + '.md'
         md = open(input_filename, 'rb')
         return md
-
-    def get_pdf(self, url):
-        from markdown import markdown
-        import pdfkit
-
-        input_filename = 'content\\'+url+'.md'
-        output_filename = url+'.pdf'
-
-        with open(input_filename, 'r') as f:
-            html_text = markdown(f.read(), output_format='html5')
-
-            config = pdfkit.configuration(wkhtmltopdf=Download_FOLDER)
-
-        pdfkit.from_string(html_text, output_filename, configuration=config)
-        pdf = open(output_filename, 'rb')
-        return pdf
 
 
     def index(self):

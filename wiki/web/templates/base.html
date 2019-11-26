@@ -5,7 +5,25 @@
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='responsive.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='pygments.css') }}">
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+		<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
 	</head>
+
+    <script>
+			function getPDF(){
+				var doc = new jsPDF();
+				console.log("test");
+				var specialElementHandlers = {
+					'#getPDF': function (element, renderer) {
+						return true;
+					}
+				};
+
+				doc.fromHTML($('#htmldiv')[0], 20, 20, {'width':500,  'elementHandlers': specialElementHandlers});
+				doc.save('TeamKiwi.pdf');
+   			}
+ 		</script>
 
 	<body>
 		<div class="navbar navbar-fixed-top">
@@ -22,13 +40,21 @@
 								<li class="divider-vertical"></li>
 								<li><a href="{{ url_for('wiki.create') }}">New Page</a></li>
 								<li class="divider-vertical"></li>
+								<li><a href="{{ url_for('wiki.upload') }}">Upload Page</a></li>
+
 								<li></li>
 							</ul>
 
 							<ul class="nav pull-right">
-								{% if current_user.is_anonymous %}
+								{% if not current_user.get_id() %}
 									<li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
+                                    <li><a href="{{ url_for('wiki.user_create') }}">Register</a></li>
 								{% else %}
+									<li class="divider-vertical"></li>
+									{% if current_user.get_id() %}
+										<li><a href="{{ url_for('wiki.profile', user_id=current_user.get_id()) }}">{{ current_user.get_id() }}'s Profile</a></li>
+									{% endif %}
+                                <li class="divider-vertical"></li>
 									<li><a href="{{ url_for('wiki.user_logout') }}">Logout</a></li>
 								{% endif %}
 							</ul>

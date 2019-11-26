@@ -5,6 +5,9 @@ Wiki Editor
 {%- endblock title %}
 
 {% block content %}
+{% if uid %}
+    <h4>You are now editing your profile page! No one else is permitted to change this page.</h4>
+{% endif %}
 <ul class="nav nav-tabs">
 	<li class="active"><a href="#editor" data-toggle="tab">Editor</a></li>
 	<li><a href="#preview" data-toggle="tab" id="previewlink">Preview</a></li>
